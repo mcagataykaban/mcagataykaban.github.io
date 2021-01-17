@@ -4,7 +4,6 @@ var pathname = window.location.pathname;
 // functions
 function changeForm() {
   if (!$("#frmGiris").hasClass("d-none")) {
-    console.log("sa");
     $("#frmGiris").addClass("d-none");
     $("#frmKayit").removeClass("d-none");
   } else {
@@ -43,10 +42,10 @@ function tarihBicimlendir(isoTarih) {
 
 function borcuTabloyaEkle(d) {
   $("#borclarTableBody").append(
-    '<tr class="' +
+    '<tr id="kaldir'+d.Id+'" class="' +
       (d.BorcluMuyum ? "taraf-alacakli" : "taraf-borclu") +
       '">' +
-      "<td>" +
+      "<td class='text-left pr-0'><a href='#' data-borc-sil-id='"+d.Id+"'><i class='fa fa-trash text-danger mr-3'></i></a>" +
       d.Taraf +
       "</td>" +
       '<td class="borc-miktar-sutun">' +
@@ -56,7 +55,8 @@ function borcuTabloyaEkle(d) {
       tarihBicimlendir(d.SonOdemeTarihi) +
       "</td><td>" +
       borcKapandiSwitch(d.BorcKapandiMi, d.Id) +
-      "</td></tr>"
+      "</td>" + 
+      "</tr>"
   );
 }
 
@@ -140,7 +140,6 @@ $("#frmKayit").submit(function (event) {
       confirmpassword: $("#inputPasswordConfirm").val(),
     },
     success: function (data) {
-      console.log(data);
       frmKayit.reset();
       $("#basari").text("Kayıt başarılı.Giriş yapabilirsiniz.").show();
       $(".switch-input").click();
@@ -167,7 +166,6 @@ $("#frmGiris").submit(function (event) {
       password: $("#inputPassword").val(),
     },
     success: function (data) {
-      console.log(data);
       frmGiris.reset();
       localStorage.removeItem("login");
       sessionStorage.removeItem("login");
@@ -197,10 +195,8 @@ $("#frmBorc").submit(function (e) {
     data: $(frm).serialize(),
     success: function (data) {
       borcuTabloyaEkle(data);
-      console.log("eklendi", data);
     },
     error: function (xhr, status, error) {
-      console.log("hata");
     },
   });
 });
@@ -225,10 +221,30 @@ $("body").on("change", "[data-borc-switch-id]", function (e) {
     headers: getAuthHeaders(),
     data: { BorcId: borcId, BorcKapandiMi: borcKapandiMi },
     success: function (data) {
-      console.log(data);
+      toastr.success("Borç güncellendi.")
     },
     error: function (xhr, status, error) {
-      console.log("hata");
+      toastr.error("Terslik var.")
+    },
+  });
+});
+
+$("body").on("click", "[data-borc-sil-id]", function (e) {
+  var borcId = $(this).data("borc-sil-id");
+  var cevap = confirm("Borcu silmek istediğinize emin misiniz?");
+  if (!cevap) {
+    return;
+  }
+  $.ajax({
+    type: "delete",
+    url: apiUrl + "api/Borclar/Sil/" + borcId,
+    headers: getAuthHeaders(),
+    success: function (data) {
+      $("#kaldir"+borcId).remove()
+      toastr.success(data)
+    },
+    error: function (xhr, status, error) {
+      toastr.error("Terslik var")
     },
   });
 });
