@@ -208,6 +208,9 @@ $("#frmBorc").submit(function (e) {
 $("#frmGiris").on("input", function () {
   $("#hata").hide();
 });
+$("#frmKayit").on("input", function () {
+  $("#hataUp").hide();
+});
 
 $(document).ajaxStart(function () {
   $("#loading").removeClass("d-none");
