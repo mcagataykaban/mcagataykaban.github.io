@@ -176,7 +176,7 @@ $("#frmGiris").submit(function (event) {
 
       $("#basari").text("Giriş başarılı. Anasayfaya yönlendiriliyor..").show();
       setTimeout(function () {
-        location.href = "/";
+        location.href = "./";
       }, 1000);
     },
     error: function (xhr, status, error) {
