@@ -140,13 +140,17 @@ $("#frmKayit").submit(function (event) {
       confirmpassword: $("#inputPasswordConfirm").val(),
     },
     success: function (data) {
+      console.log(data);
       frmKayit.reset();
       $("#basari").text("Kayıt başarılı.Giriş yapabilirsiniz.").show();
       $(".switch-input").click();
     },
     error: function (xhr, status, error) {
-      if (xhr.responseJSON.error) {
-        $("#hata").text("Kullanıcı adı ya da parola yanlış!").show();
+      if (xhr.responseJSON.ModelState["model.ConfirmPassword"]) {
+        $("#hataUp").text("Şifreler eşleşmiyor.").show();
+      }
+      else if (xhr.responseJSON.ModelState[""][1]) {
+        $("#hataUp").text("Bu mail daha önce alınmış.").show();
       }
     },
   });
