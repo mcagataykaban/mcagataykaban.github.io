@@ -1,0 +1,27 @@
+.gizle{
+    display: none;
+}
+#loading{
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#tblBorclar th.borc-miktar-sutun, .borc-miktar-sutun{
+    text-align: right;
+}
+tr.taraf-alacakli > td.borc-miktar-sutun{
+    color: var(--danger);
+}tr.taraf-alacakli > td.borc-miktar-sutun::before{
+    content: "-";
+}
+tr.taraf-borclu > td.borc-miktar-sutun{
+    color: var(--success);
+}
+tr.taraf-borclu > td.borc-miktar-sutun::before{
+    content: "+";
+}
