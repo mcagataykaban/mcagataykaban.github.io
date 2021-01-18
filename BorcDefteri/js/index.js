@@ -42,10 +42,14 @@ function tarihBicimlendir(isoTarih) {
 
 function borcuTabloyaEkle(d) {
   $("#borclarTableBody").append(
-    '<tr id="kaldir'+d.Id+'" class="' +
+    '<tr id="kaldir' +
+      d.Id +
+      '" class="' +
       (d.BorcluMuyum ? "taraf-alacakli" : "taraf-borclu") +
       '">' +
-      "<td class='text-left pr-0'><a href='#' data-borc-sil-id='"+d.Id+"'><i class='fa fa-trash text-danger mr-3'></i></a>" +
+      "<td class='text-left pr-0'><a href='#' data-borc-sil-id='" +
+      d.Id +
+      "'><i class='fa fa-trash text-danger mr-3'></i></a>" +
       d.Taraf +
       "</td>" +
       '<td class="borc-miktar-sutun">' +
@@ -55,7 +59,7 @@ function borcuTabloyaEkle(d) {
       tarihBicimlendir(d.SonOdemeTarihi) +
       "</td><td>" +
       borcKapandiSwitch(d.BorcKapandiMi, d.Id) +
-      "</td>" + 
+      "</td>" +
       "</tr>"
   );
 }
@@ -148,9 +152,10 @@ $("#frmKayit").submit(function (event) {
     error: function (xhr, status, error) {
       if (xhr.responseJSON.ModelState["model.ConfirmPassword"]) {
         $("#hataUp").text("Şifreler eşleşmiyor.").show();
-      }
-      else if (xhr.responseJSON.ModelState[""][1]) {
+      } else if (xhr.responseJSON.ModelState[""][1]) {
         $("#hataUp").text("Bu mail daha önce alınmış.").show();
+      } else{
+        $("#hataUp").text("Parola min 6 karakterden oluşmalı içinde büyük,küçük harf ve rakam bulunmalıdır.").show();
       }
     },
   });
@@ -200,8 +205,7 @@ $("#frmBorc").submit(function (e) {
     success: function (data) {
       borcuTabloyaEkle(data);
     },
-    error: function (xhr, status, error) {
-    },
+    error: function (xhr, status, error) {},
   });
 });
 
@@ -228,10 +232,10 @@ $("body").on("change", "[data-borc-switch-id]", function (e) {
     headers: getAuthHeaders(),
     data: { BorcId: borcId, BorcKapandiMi: borcKapandiMi },
     success: function (data) {
-      toastr.success("Borç güncellendi.")
+      toastr.success("Borç güncellendi.");
     },
     error: function (xhr, status, error) {
-      toastr.error("Terslik var.")
+      toastr.error("Terslik var.");
     },
   });
 });
@@ -247,11 +251,11 @@ $("body").on("click", "[data-borc-sil-id]", function (e) {
     url: apiUrl + "api/Borclar/Sil/" + borcId,
     headers: getAuthHeaders(),
     success: function (data) {
-      $("#kaldir"+borcId).remove()
-      toastr.success(data)
+      $("#kaldir" + borcId).remove();
+      toastr.success(data);
     },
     error: function (xhr, status, error) {
-      toastr.error("Terslik var")
+      toastr.error("Terslik var");
     },
   });
 });
